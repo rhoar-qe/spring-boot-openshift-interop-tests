@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>rhoar</artifactId>
+        <groupId>com.redhat</groupId>
+        <version>3.1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.redhat.rhoar.sb</groupId>
+    <artifactId>test-sb</artifactId>
+    <name>RHOAR QE testsuite :: Springboot test suite</name>
+
+    <properties>
+        <provider>none</provider>
+
+        <groups>NONE</groups>
+        <excludedGroups/>
+        <test.script.debug>false</test.script.debug>
+        <property.no.admin>false</property.no.admin>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>cz.xtf</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cz.xtf</groupId>
+            <artifactId>http-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cz.xtf</groupId>
+            <artifactId>test-helpers</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cz.xtf</groupId>
+            <artifactId>builder</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cz.xtf</groupId>
+            <artifactId>junit5</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+            <version>${version.org.springframework.boot}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>maven-invoker</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+            <version>${version.org.springframework.boot}</version>
+            <!-- On SB version 2.5.8, Jackson-databind does collide with XTF 0.24 -->
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${version.org.springframework.boot}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <groups>${groups}</groups>
+                    <excludedGroups>${excludedGroups}</excludedGroups>
+                    <failIfNoTests>true</failIfNoTests>
+                    <trimStackTrace>false</trimStackTrace>
+                    <runOrder>filesystem</runOrder>
+                    <systemProperties>
+                        <kubernetes.auth.tryKubeConfig>false</kubernetes.auth.tryKubeConfig>
+                        <xtf.msa.provider>${provider}</xtf.msa.provider>
+                        <noAdmin>${property.no.admin}</noAdmin>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+    <profiles>
+        <profile>
+            <id>springboot2</id>
+            <properties>
+                <groups>springBoot2</groups>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <groups>InvestigationProfile</groups>
+            </properties>
+        </profile>
+        <profile>
+            <id>noAdmin</id>
+            <properties>
+                <property.no.admin>true</property.no.admin>
+                <excludedGroups>RequiresAdminPrivilege</excludedGroups>
+            </properties>
+        </profile>
+        <profile>
+            <id>interop</id>
+            <properties>
+                <groups>InteropTesting</groups>
+            </properties>
+        </profile>
+    </profiles>
+</project>
