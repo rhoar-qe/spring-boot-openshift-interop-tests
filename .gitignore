@@ -1,0 +1,20 @@
+# Maven
+target
+
+# temp files
+log
+tmp
+log.txt
+*.log
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Test properties
+test.properties
+
+# Properties used in runtime
+used-test.properties
+

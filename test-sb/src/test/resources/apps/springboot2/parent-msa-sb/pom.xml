@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.redhat.xpaas</groupId>
+    <artifactId>parent-msa-sb</artifactId>
+    <packaging>pom</packaging>
+    <version>2.0.0-SNAPSHOT</version>
+
+    <name>RhoarQE :: Productized SpringBoot Parent</name>
+    <description>Productized SpringBoot Parent for QE Msa test deployments</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.version>3.10.1</maven.compiler.version>
+        <maven.compiler.target.version>1.8</maven.compiler.target.version>
+        <maven.compiler.source.version>1.8</maven.compiler.source.version>
+        <maven.war.plugin.version>3.3.2</maven.war.plugin.version>
+
+        <maven.surefire.plugin.version>3.0.0-M8</maven.surefire.plugin.version>
+
+        <version.org.springframework.boot>2.7.12</version.org.springframework.boot>
+        <spring-boot.bom.version>SET_BOM_VERSION</spring-boot.bom.version>
+
+        <oracle.ojdbc.version>21.8.0.0</oracle.ojdbc.version>
+        <postgresql.version>42.5.3</postgresql.version>
+        <version.mysql-connector-java>8.0.32</version.mysql-connector-java>
+
+        <org.json.version>20220924</org.json.version>
+        <com.h2database.version>1.4.200</com.h2database.version>
+
+        <!-- Do not upgrade to 6.* version, they are not compatible with java 8 -->
+        <spring.webmvc.version>5.3.25</spring.webmvc.version>
+    </properties>
+
+    <repositories>
+        <!-- Required for snowdrop artifact -->
+        <repository>
+            <id>RedHat maven repo</id>
+            <url>https://maven.repository.redhat.com/ga/</url>
+        </repository>
+    </repositories>
+
+    <profiles>
+        <profile>
+            <!-- Use rhoarqe internal BOM
+                This profile is used for normal testing, but would break interop testing,
+                 as this bom is no available outside rhoarqe infrastructure
+
+                 This profile is activeByDefault, it is deactivated only for interop testing
+            -->
+            <!--
+                 We need maven to first take dependencies from rhoar-qe BOM (to override the ones in upstream SB BOM)
+                 Maven takes dependencies from first listed BOM as priority, so we need rhoar-qe BOM to be listed as first.
+                 That's why this list has to be in the profile, if we move to top-level dependencyManagement
+                 it will override versions from internal rhoarq-qe BOM
+           -->
+            <id>rhoarqe-bom</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>dev.rhoarqe</groupId>
+                        <artifactId>spring-boot-bom</artifactId>
+                        <version>${spring-boot.bom.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-dependencies</artifactId>
+                        <version>${version.org.springframework.boot}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+
+                    <!-- PostgreSQL -->
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>${postgresql.version}</version>
+                    </dependency>
+                    <!-- MySQL -->
+                    <dependency>
+                        <groupId>com.mysql</groupId>
+                        <artifactId>mysql-connector-j</artifactId>
+                        <version>${version.mysql-connector-java}</version>
+                    </dependency>
+                    <!-- Oracle 19c -->
+                    <dependency>
+                        <groupId>com.oracle.database.jdbc</groupId>
+                        <artifactId>ojdbc8</artifactId>
+                        <version>${oracle.ojdbc.version}</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.json</groupId>
+                        <artifactId>json</artifactId>
+                        <version>${org.json.version}</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>${com.h2database.version}</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-webmvc</artifactId>
+                        <version>${spring.webmvc.version}</version>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+        </profile>
+
+        <profile>
+            <!-- Interop tests are not able to download rhoarqe BOM
+             so dependencies required for interop tests are hardcoded here -->
+            <id>interop</id>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jboss.resteasy</groupId>
+                        <artifactId>resteasy-jaxrs</artifactId>
+                        <version>3.15.3.Final-redhat-00001</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.jboss.resteasy</groupId>
+                        <artifactId>resteasy-spring-boot-starter</artifactId>
+                        <version>3.9.4.Final-redhat-00009</version>
+                    </dependency>
+                    
+                    <dependency>
+                        <groupId>org.apache.tomcat.embed</groupId>
+                        <artifactId>tomcat-embed-core</artifactId>
+                        <version>9.0.62.redhat-00005</version>
+                    </dependency>                    
+
+                    <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-dependencies</artifactId>
+                        <version>${version.org.springframework.boot}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+        </profile>
+    </profiles>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${version.org.springframework.boot}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${maven.war.plugin.version}</version>
+                </plugin>
+                <!-- We specify the Maven compiler plugin as we need to set it to Java 1.8 -->
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.version}</version>
+                    <configuration>
+                        <source>${maven.compiler.source.version}</source>
+                        <target>${maven.compiler.target.version}</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                       <id>repackage</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
