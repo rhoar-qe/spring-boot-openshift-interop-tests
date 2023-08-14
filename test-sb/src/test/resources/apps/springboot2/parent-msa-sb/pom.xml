@@ -21,7 +21,7 @@
 
         <maven.surefire.plugin.version>3.0.0-M8</maven.surefire.plugin.version>
 
-        <version.org.springframework.boot>2.7.12</version.org.springframework.boot>
+        <version.org.springframework.boot>SET_SB_VERSION</version.org.springframework.boot>
         <spring-boot.bom.version>SET_BOM_VERSION</spring-boot.bom.version>
 
         <oracle.ojdbc.version>21.8.0.0</oracle.ojdbc.version>
