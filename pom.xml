@@ -8,7 +8,7 @@
   <name>RHOAR-QE Test Suite</name>
 
   <properties>
-    <xtf.version>0.28</xtf.version>
+    <xtf.version>0.30</xtf.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <version.org.slf4j>2.0.6</version.org.slf4j>
