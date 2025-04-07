@@ -11,11 +11,11 @@ import java.util.Collections;
  * @author Radek Koubsky (rkoubsky@redhat.com)
  */
 @AllArgsConstructor
-public enum SpringBoot2Build implements BuildDefinition {
-  RESTEASY_INTEROP(new SpringBoot2BuildDefinition("resteasy","resteasy",Collections.singletonMap("MAVEN_ARGS", "-Pinterop -P !rhoarqe-bom -DskipTests -Dfabric8.skip=true package")));
+public enum SpringBoot3Build implements BuildDefinition {
+  REST_INTEROP(new SpringBoot3BuildDefinition("rest", "rest", Collections.singletonMap("MAVEN_ARGS", "-Pinterop package")));
 
   @Getter
-  private final SpringBoot2BuildDefinition buildDefinition;
+  private final SpringBoot3BuildDefinition buildDefinition;
 
   @Override
   public BinaryBuild getManagedBuild() {

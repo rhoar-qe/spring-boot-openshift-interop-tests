@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.redhat.xpaas</groupId>
+    <artifactId>parent-msa-sb</artifactId>
+    <packaging>pom</packaging>
+    <version>3.0.0-SNAPSHOT</version>
+
+    <name>RhoarQE :: Productized SpringBoot Parent</name>
+    <description>Productized SpringBoot Parent for QE Msa test deployments</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.version>3.11.0</maven.compiler.version>
+        <maven.compiler.release.version>21</maven.compiler.release.version>
+        <maven.war.plugin.version>3.4.0</maven.war.plugin.version>
+        <maven.surefire.plugin.version>3.1.2</maven.surefire.plugin.version>
+
+        <version.org.springframework.boot>3.4.4</version.org.springframework.boot>
+    </properties>
+
+    <repositories>
+        <!-- Required for snowdrop artifact -->
+        <repository>
+            <id>RedHat maven repo</id>
+            <url>http://maven.repository.redhat.com/ga/</url>
+        </repository>
+    </repositories>
+
+    <profiles>
+        <profile>
+            <!-- Interop tests are not able to download rhoarqe BOM
+            so dependencies required for interop tests are hardcoded here -->
+            <id>interop</id>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-dependencies</artifactId>
+                        <version>${version.org.springframework.boot}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+        </profile>
+    </profiles>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${version.org.springframework.boot}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${maven.war.plugin.version}</version>
+                </plugin>
+                <!-- We specify the Maven compiler plugin as we need to set it to Java 1.8 -->
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.version}</version>
+                    <configuration>
+                      <release>${maven.compiler.release.version}</release>
+                      <parameters>true</parameters>
+                    </configuration>                   
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                       <id>repackage</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -14,8 +14,8 @@ import java.util.Map;
 /**
  * @author Radek Koubsky (rkoubsky@redhat.com)
  */
-public class SpringBoot2BuildDefinition implements BuildDefinition {
-  private final static String MODULE_NAME = "springboot2";
+public class SpringBoot3BuildDefinition implements BuildDefinition {
+  private final static String MODULE_NAME = "springboot3";
 
   private String buildName;
   private Path path;
@@ -24,16 +24,16 @@ public class SpringBoot2BuildDefinition implements BuildDefinition {
   private BinarySourceBuild managedBuild = null;
   private boolean forceRebuild = false;
 
-  public SpringBoot2BuildDefinition(String appName) {
+  public SpringBoot3BuildDefinition(String appName) {
     init(appName, TestParent.findApplicationDirectory(appName, MODULE_NAME), null);
   }
 
-  public SpringBoot2BuildDefinition(String appName, boolean forceRebuild) {
+  public SpringBoot3BuildDefinition(String appName, boolean forceRebuild) {
     this.forceRebuild = forceRebuild;
     init(appName, TestParent.findApplicationDirectory(appName, MODULE_NAME), null);
   }
 
-  public SpringBoot2BuildDefinition(String appName, String buildName, Map<String, String> envProperties) {
+  public SpringBoot3BuildDefinition(String appName, String buildName, Map<String, String> envProperties) {
     init(buildName, TestParent.findApplicationDirectory(appName, MODULE_NAME), envProperties);
   }
 

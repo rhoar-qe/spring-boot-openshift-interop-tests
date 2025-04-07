@@ -6,8 +6,8 @@ import java.lang.annotation.Target;
 
 import org.junit.jupiter.api.Tag;
 
-@Tag("springBoot2")
+@Tag("springBoot3")
 @Retention(RetentionPolicy.RUNTIME)
 @Target({java.lang.annotation.ElementType.TYPE})
-public @interface SpringBoot2Profile {
+public @interface SpringBoot3Profile {
 }

@@ -17,7 +17,7 @@ OPENSHIFT_PROJECT=$2
 OPENSHIFT_USERNAME=$3
 OPENSHIFT_PASSWORD=$4
 
-SPRING_BOOT_VERSION="2.7.12"
+SPRING_BOOT_VERSION="3.4.4"
 
 # ********* prepare test.properties file ***************
 
@@ -37,13 +37,13 @@ EOF
 
 
 # ****** Set SB version in parent pom file *******
-PARENT_POM="test-sb/src/test/resources/apps/springboot2/parent-msa-sb/pom.xml"
+PARENT_POM="test-sb/src/test/resources/apps/springboot3/parent-msa-sb/pom.xml"
 if cat $PARENT_POM | grep "SET_SB_VERSION" > /dev/null; then
   sed -i -e 's/<version.org.springframework.boot>SET_SB_VERSION<\/version.org.springframework.boot>/<version.org.springframework.boot>'$SPRING_BOOT_VERSION'<\/version.org.springframework.boot>/g' $PARENT_POM
 fi
 
 # ******** run the tests *****
-mvn clean verify -Pinterop -PnoAdmin -Dversion.org.springframework.boot=$SPRING_BOOT_VERSION
+mvn clean test -Pinterop -PnoAdmin -Dversion.org.springframework.boot=$SPRING_BOOT_VERSION
 
 #store junit report
 cp test-sb/target/surefire-reports/*.xml junit-report.xml
