@@ -1,4 +1,4 @@
-FROM maven:3.8-openjdk-11
+FROM maven:3.9-eclipse-temurin-21
 
 # Copy the spring-boot-openshift-interop-tests repository into /spring-boot-openshift-interop-tests
 RUN mkdir /spring-boot-openshift-interop-tests

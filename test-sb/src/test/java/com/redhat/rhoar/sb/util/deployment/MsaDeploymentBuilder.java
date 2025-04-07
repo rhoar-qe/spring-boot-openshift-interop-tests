@@ -7,7 +7,7 @@ import cz.xtf.builder.builders.ApplicationBuilder;
 import cz.xtf.builder.builders.deployment.AbstractProbe;
 import cz.xtf.builder.builders.pod.ContainerBuilder;
 import cz.xtf.builder.builders.pod.PersistentVolumeClaim;
-import cz.xtf.builder.db.OpenShiftAuxiliary;
+import cz.xtf.builder.db.AbstractDatabase;
 import cz.xtf.client.Http;
 import cz.xtf.core.bm.BinaryBuild;
 import cz.xtf.core.bm.BuildManagers;
@@ -48,7 +48,7 @@ public class MsaDeploymentBuilder {
   private JolokiaConfiguration jolokiaConf = new JolokiaConfiguration.Builder().build();
   private String jolokiaHostname;
   private Consumer<ContainerBuilder> containerModification;
-  private OpenShiftAuxiliary database;
+  private AbstractDatabase database;
   private boolean dbPostDeployment;
   private String dbPostDeploymentName;
   private ApplicationBuilder appBuilder;
@@ -97,7 +97,7 @@ public class MsaDeploymentBuilder {
     return this;
   }
 
-  public MsaDeploymentBuilder withDatabase(final OpenShiftAuxiliary db, final boolean postDeployment) {
+  public MsaDeploymentBuilder withDatabase(final AbstractDatabase db, final boolean postDeployment) {
     this.database = db;
     this.dbPostDeployment = postDeployment;
     return this;
@@ -230,8 +230,9 @@ public class MsaDeploymentBuilder {
     if (!buildFinished){
       waitForBuild();
     }
+    
     this.appBuilder.buildApplication(OpenShifts.master()).deploy();
-
+    
     BooleanSupplier bs = () -> {
       final String secureCheckUrl = this.secureUrlSuffix != null ? "https://" + this.secureHostName + "/" + this.secureUrlSuffix : null;
       OpenShifts.master().waiters().areExactlyNPodsReady(this.replicas, this.appName).waitFor();
@@ -316,7 +317,7 @@ public class MsaDeploymentBuilder {
     if (this.database != null && this.appBuilder != null && this.dbPostDeploymentName != null) {
       log.info("Database post deployment");
       OpenShifts.master().scale(this.dbPostDeploymentName, 1);
-      OpenShifts.master().deployLatest(this.dbPostDeploymentName);
+      //OpenShifts.master().deployLatest(this.dbPostDeploymentName);
     }
   }
 

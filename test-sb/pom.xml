@@ -5,7 +5,7 @@
     <parent>
         <artifactId>rhoar</artifactId>
         <groupId>com.redhat</groupId>
-        <version>3.1.0-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -107,19 +107,6 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-            <version>${version.org.springframework.boot}</version>
-            <!-- On SB version 2.5.8, Jackson-databind does collide with XTF 0.24 -->
-            <exclusions>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                    <artifactId>jackson-databind</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${version.org.springframework.boot}</version>
         </dependency>
@@ -155,9 +142,9 @@
 
     <profiles>
         <profile>
-            <id>springboot2</id>
+            <id>springboot3</id>
             <properties>
-                <groups>springBoot2</groups>
+                <groups>springBoot3</groups>
             </properties>
         </profile>
         <profile>
